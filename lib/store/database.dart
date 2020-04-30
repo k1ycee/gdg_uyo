@@ -52,13 +52,14 @@ class TravelDB{
 
   updateTravel(Travel upTravel)async{
     final db = await database;
-    var res = await db.update("Travels", upTravel.toJson());
+    var res = await db.update("Travels", upTravel.toJson(), where: "id = ?", whereArgs: [upTravel.id]);
     return res;
   }
 
   deleteTravel(int id)async{
     final db = await database;
     var res = await db.delete("Travels", where: "id = ?", whereArgs: [id]);
+    await getTravels();
     return res;
   }
 

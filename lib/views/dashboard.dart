@@ -42,7 +42,7 @@ class _DashBoardState extends State<DashBoard> {
                         color: Colors.blue,
                         borderRadius: BorderRadius.circular(50),
                       ),
-                      child: Center(child: Text('Trips', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600,))),
+                      child: Center(child: Text('10 Trips', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600,))),
                     ),
                   ],
                 ),
@@ -107,19 +107,22 @@ class _DashBoardState extends State<DashBoard> {
                                     ],
                                     onSelected: (value)async{
                                       if(value == 2){
-                                        await TravelDB.db.deleteTravel(snapshot.data[index].id);
-                                        tr.removeAt(snapshot.data[index].id);
+                                         await TravelDB.db.deleteTravel(snapshot.data[index].id);
                                       }
                                       else if(value == 1){
-                                        Travel(
-                                           depature: depatureController.text,
-                                           depDate: _depDate,
-                                           depTime: _depTime,
-                                           destination: destinationController.text,
-                                           desDate: _desDate,
-                                           desTime: _desTime,
-                                           tripType: _value
-                                        );
+                                        setState(() async{
+                                          TravelDB.db.updateTravel(
+                                            Travel(
+                                              depature: depatureController.text,
+                                              depDate: _depDate,
+                                              depTime: _depTime,
+                                              destination: destinationController.text,
+                                              desDate: _desDate,
+                                              desTime: _desTime,
+                                              tripType: _value 
+                                            )
+                                          );
+                                        });
                                       }
                                     },
                                   ),
