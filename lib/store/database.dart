@@ -45,7 +45,7 @@ class TravelDB{
 
   Future<List<Travel>>getTravels() async{
     final db = await database;
-    var res = await db.query("Travels");
+    var res = await db.rawQuery("SELECT * FROM Travels");
     List<Travel> trList = res.isNotEmpty ? res.map((trs) => Travel.fromMap(trs)).toList() : [];
     return trList;
   }
@@ -56,18 +56,18 @@ class TravelDB{
     return res;
   }
 
-  deletTravel(int id)async{
+  deleteTravel(int id)async{
     final db = await database;
     var res = await db.delete("Travels", where: "id = ?", whereArgs: [id]);
     return res;
   }
 
-  Future <int> getCount() async{
+  Future<int> getCount() async{
     final db = await database;
     var res = Sqflite.firstIntValue(
       await db.rawQuery("select count (*) from Travels")
     );
-    return res;
+    return res.toInt();
   }
 
 }
