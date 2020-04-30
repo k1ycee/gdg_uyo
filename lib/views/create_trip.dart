@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:gdg_uyo/models/travel_model.dart';
 import 'package:gdg_uyo/store/database.dart';
+// import 'package:flutter/src/material/date_picker.dart';
 
 class CreateTrip extends StatefulWidget {
   @override
@@ -10,12 +12,19 @@ class CreateTrip extends StatefulWidget {
 class _CreateTripState extends State<CreateTrip> {
   
   final depatureController = TextEditingController();
-  final depTimeController = TextEditingController();
-  final depDateController = TextEditingController();
   final destinationController = TextEditingController();
-  final desTimeController = TextEditingController();
-  final desDateController = TextEditingController();
   var _value;
+  String _depDate = "Enter Date";
+  String _depTime = "Enter Time";
+  String _desDate = "Enter Date";
+  String _desTime = "Enter Time";
+  
+
+  @override
+  void initState() {
+    
+    super.initState();
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -33,30 +42,53 @@ class _CreateTripState extends State<CreateTrip> {
                   controller: depatureController,
                   decoration: InputDecoration(hintText: 'Enter Depature',hintStyle: TextStyle(color: Colors.grey[500])),
                 ),
-                SizedBox(height: 20,),
+                SizedBox(height: 30,),
                 Row(
                   children: <Widget>[
-                    Container(
-                      width: 120,
-                      height: 60,
-                      child: TextFormField(
-                        keyboardAppearance: Brightness.dark,
-                        keyboardType: TextInputType.datetime,
-                        controller: depTimeController,
-                        decoration: InputDecoration(hintText: 'Enter Date',hintStyle: TextStyle(color: Colors.grey[500])),
+                    GestureDetector(
+                        onTap: (){
+                         DatePicker.showDatePicker(
+                         context, 
+                         theme: DatePickerTheme(containerHeight: 210.0),
+                         showTitleActions: true,
+                         minTime: DateTime(1900, 1, 1),
+                         maxTime: DateTime(2050, 12, 12),
+                         onConfirm: (date){
+                           _depDate = '${date.year} - ${date.month} - ${date.day}';
+                           setState(() {});
+                         }
+                         );
+                       },
+                        child: Container(
+                        width: 120,
+                        height: 60,
+                        child: Text(
+                          '$_depDate',style: TextStyle(color: Colors.grey[500]),
+                        ),
                       ),
                     ), 
                     SizedBox(width: 60,),
-                     Container(
-                      width: 120,
-                      height: 60,
-                      child: TextFormField(
-                        keyboardAppearance: Brightness.dark,
-                        keyboardType: TextInputType.datetime,
-                        controller: depDateController,
-                        decoration: InputDecoration(hintText: 'Enter Time',hintStyle: TextStyle(color: Colors.grey[500])),
-                      ),
-                    ), 
+                     GestureDetector(
+                       onTap: (){
+                         DatePicker.showTimePicker(
+                           context,
+                             theme: DatePickerTheme(
+                            containerHeight: 210.0,
+                               ),
+                            showTitleActions: true, onConfirm: (time) {
+                           _depTime = '${time.hour} : ${time.minute} : ${time.second}';
+                            setState(() {});
+                            }, currentTime: DateTime.now(), locale: LocaleType.en);
+                            setState(() {});
+                          },
+                        child: Container(
+                        width: 120,
+                        height: 60,
+                        child: Text(
+                            '$_depTime',style: TextStyle(color: Colors.grey[500]),
+                        ),
+                    ),
+                     ), 
                 ],
                 ),
                 SizedBox(height: 10,),
@@ -66,30 +98,53 @@ class _CreateTripState extends State<CreateTrip> {
                   controller: destinationController,
                   decoration: InputDecoration(hintText: 'Enter Destination',hintStyle: TextStyle(color: Colors.grey[500])),
                 ),
-                SizedBox(height: 20,),
+                SizedBox(height: 30,),
                  Row(
                   children: <Widget>[
-                    Container(
-                      width: 120,
-                      height: 60,
-                      child: TextFormField(
-                        keyboardAppearance: Brightness.dark,
-                        keyboardType: TextInputType.datetime,
-                        controller: desTimeController,
-                        decoration: InputDecoration(hintText: 'Enter Date',hintStyle: TextStyle(color: Colors.grey[500])),
+                    GestureDetector(
+                      onTap: (){
+                         DatePicker.showDatePicker(
+                         context, 
+                         theme: DatePickerTheme(containerHeight: 210.0),
+                         showTitleActions: true,
+                         minTime: DateTime(1900, 1, 1),
+                         maxTime: DateTime(2050, 12, 12),
+                         onConfirm: (date){
+                           _desDate = '${date.year} - ${date.month} - ${date.day}';
+                           setState(() {});
+                         }
+                         );
+                       },
+                      child: Container(
+                        width: 120,
+                        height: 60,
+                        child: Text(
+                          '$_desDate',style: TextStyle(color: Colors.grey[500])
+                        ),
                       ),
                     ), 
                     SizedBox(width: 60,),
-                     Container(
-                      width: 120,
-                      height: 60,
-                      child: TextFormField(
-                        keyboardAppearance: Brightness.dark,
-                        keyboardType: TextInputType.datetime,
-                        controller: desDateController,
-                        decoration: InputDecoration(hintText: 'Enter Time',hintStyle: TextStyle(color: Colors.grey[500],)),
-                      ),
-                    ), 
+                     GestureDetector(
+                       onTap:(){
+                         DatePicker.showTimePicker(
+                           context,
+                             theme: DatePickerTheme(
+                            containerHeight: 210.0,
+                               ),
+                            showTitleActions: true, onConfirm: (time) {
+                           _desTime = '${time.hour} : ${time.minute} : ${time.second}';
+                            setState(() {});
+                            }, currentTime: DateTime.now(), locale: LocaleType.en);
+                            setState(() {});
+                          }, 
+                        child: Container(
+                        width: 120,
+                        height: 60,
+                        child: Text(
+                           '$_desTime',style: TextStyle(color: Colors.grey[500],),
+                        ),
+                    ),
+                  ), 
                 ],
                 ),
                 SizedBox(height: 10,),
@@ -126,12 +181,12 @@ class _CreateTripState extends State<CreateTrip> {
                   onTap: (){
                     TravelDB.db.newTravel(
                       Travel(
-                        depDate: depDateController.text,
-                        depTime: depTimeController.text,
-                        desDate: desDateController.text,
-                        desTime: desTimeController.text,
                         depature: depatureController.text,
+                        depDate: _depDate,
+                        depTime: _depTime,
                         destination: destinationController.text,
+                        desDate: _desDate,
+                        desTime: _desTime,
                         tripType: _value
                       )
                     );
@@ -151,3 +206,4 @@ class _CreateTripState extends State<CreateTrip> {
     );
   }
 }
+

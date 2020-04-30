@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/':(context) => DashBoard(),
-        '/createTrip': (context) => CreateTrip()
+        '/createTrip': (context) => CreateTrip(),
       },
     );
   }

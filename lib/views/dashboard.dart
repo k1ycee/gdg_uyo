@@ -11,12 +11,21 @@ class DashBoard extends StatefulWidget {
 }
 
 class _DashBoardState extends State<DashBoard> {
+  List<Travel> tr = List<Travel>();
+  final depatureController = TextEditingController();
+  final destinationController = TextEditingController();
+  var _value;
+  String _depDate = "Enter Date";
+  String _depTime = "Enter Time";
+  String _desDate = "Enter Date";
+  String _desTime = "Enter Time";
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         floatingActionButton: FloatingActionButton(onPressed: (){Navigator.pushNamed(context, '/createTrip');},backgroundColor: Colors.blue,child: Icon(Icons.add),),
-        backgroundColor: Colors.grey[100],
+        backgroundColor: Colors.grey[50],
         body: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Container(
@@ -33,7 +42,7 @@ class _DashBoardState extends State<DashBoard> {
                         color: Colors.blue,
                         borderRadius: BorderRadius.circular(50),
                       ),
-                      child: Center(child: Text('Trips', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600,))),
+                      child: Center(child: Text('10 Trips', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600,))),
                     ),
                   ],
                 ),
@@ -52,7 +61,7 @@ class _DashBoardState extends State<DashBoard> {
                           itemCount: snapshot.data.length,
                           itemBuilder: (context, index){
                             return Padding(
-                              padding: const EdgeInsets.all(12.0),
+                              padding: const EdgeInsets.all(10.0),
                               child: Container(
                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.white),
                       height: 140,
@@ -65,27 +74,58 @@ class _DashBoardState extends State<DashBoard> {
                               children: <Widget>[
                               Container(
                                 child: Column(children: <Widget>[
-                                  Text('${snapshot.data[index].depature}'),
+                                  Text('${snapshot.data[index].depature}', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
                                   SizedBox(height: 5,),
-                                  Text('${snapshot.data[index].depDate.toString()}'),
+                                  Text('${snapshot.data[index].depDate.toString()}',style: TextStyle(color: Colors.grey[400])),
                                   SizedBox(height: 5,),
-                                  Text('${snapshot.data[index].depTime.toString()}'),
+                                  Text('${snapshot.data[index].depTime.toString()}' , style: TextStyle(color: Colors.grey[400])),
                                   SizedBox(height: 35,),
-                                  Container(height: 20,width: 70, decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: Colors.white),),
-                                ],),
+                                  Container(height: 20,width: 70, child: Center(child: Text(getText('${snapshot.data[index].tripType}'), style: TextStyle(color: Colors.white),)), decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: getColor(snapshot.data[index].tripType,),
+                                  ))],),
                               ),
                               SizedBox(width: 10,),
                               Container(child: Icon(Icons.flight_takeoff)),
                               SizedBox(width: 10,),
                               Container(child: Column(
                                 children: <Widget>[
-                                  Text('${snapshot.data[index].destination}'),
+                                  Text('${snapshot.data[index].destination}' , style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                                   SizedBox(height: 5,),
-                                  Text('${snapshot.data[index].desDate.toString()}'),
+                                  Text('${snapshot.data[index].desDate.toString()}' , style: TextStyle(color: Colors.grey[400])),
                                   SizedBox(height: 5,),
-                                  Text('${snapshot.data[index].desTime.toString()}'),
-                                  SizedBox(height: 22,),
-                                  IconButton(icon: Icon(Icons.more_vert),onPressed:null ,)
+                                  Text('${snapshot.data[index].desTime.toString()}', style: TextStyle(color: Colors.grey[400])),
+                                  SizedBox(height: 19,),
+                                  PopupMenuButton<int>(
+                                    itemBuilder: (context) =>[
+                                      PopupMenuItem(
+                                        value: 1,
+                                        child: Text('Update'),
+                                      ),
+                                      PopupMenuItem(
+                                        value: 2,
+                                        child: Text('Delete'),
+                                      ),
+                                    ],
+                                    onSelected: (value)async{
+                                      if(value == 2){
+                                         await TravelDB.db.deleteTravel(snapshot.data[index].id);
+                                      }
+                                      else if(value == 1){
+                                        setState(() async{
+                                          TravelDB.db.updateTravel(
+                                            Travel(
+                                              depature: depatureController.text,
+                                              depDate: _depDate,
+                                              depTime: _depTime,
+                                              destination: destinationController.text,
+                                              desDate: _desDate,
+                                              desTime: _desTime,
+                                              tripType: _value 
+                                            )
+                                          );
+                                        });
+                                      }
+                                    },
+                                  ),
                                 ],
                               ))
                           ],),
@@ -106,4 +146,43 @@ class _DashBoardState extends State<DashBoard> {
       ),
     );
   }
+  Color getColor(String trs){
+  switch(trs){
+    case "1":
+      return Colors.blue;
+    break;
+    case "2":
+      return Colors.cyan;
+    break;
+    case "3":
+      return Colors.pinkAccent;
+    break;
+    case "4":
+      return Colors.amber;
+    break;
+    default:
+      return Colors.grey[500];
+      break;
+    }
+  }
+  String getText(String trs){
+  switch(trs){
+    case "1":
+      return "Business";
+    break;
+    case "2":
+      return "Education";
+    break;
+    case "3":
+      return "Vacation";
+    break;
+    case "4":
+      return "Health";
+    break;
+    default:
+      return "There is Nothing";
+      break;
+    }
+  }
 }
+
