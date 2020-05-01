@@ -80,7 +80,10 @@ class _DashBoardState extends State<DashBoard> {
                                   SizedBox(height: 5,),
                                   Text('${snapshot.data[index].depTime.toString()}' , style: TextStyle(color: Colors.grey[400])),
                                   SizedBox(height: 35,),
-                                  Container(height: 20,width: 70, child: Center(child: Text(getText('${snapshot.data[index].tripType}'), style: TextStyle(color: Colors.white),)), decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: getColor(snapshot.data[index].tripType,),
+                                  Container(height: 20,width: 70, child: Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Center(child: Text(getText('${snapshot.data[index].tripType}'), style: TextStyle(color: Colors.white),)),
+                                  ), decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: getColor(snapshot.data[index].tripType,),
                                   ))],),
                               ),
                               SizedBox(width: 10,),
